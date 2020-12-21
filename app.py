@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World on pythonenywhere!'
+    return 'Hello World on http://zelenskiy.pythonanywhere.com/!'
 
 
 if __name__ == '__main__':
