@@ -1,0 +1,30 @@
+{%  extends 'base.html' %}
+
+{%  block title %}
+Уведення запису
+{% endblock %}
+
+{%  block body %}
+<div class="container">
+    <h1>Додавання запису</h1>
+
+        <form method="POST">
+            <input name="title" id="title" placeholder="Назва новини" type="text"><br>
+            <input name="ip" id="ip" placeholder="Назва новини" type="text" hidden><br>
+            <textarea name="intro" id="intro" cols="30" rows="10" ></textarea><br>
+            <textarea name="text" id="text" cols="30" rows="10" ></textarea><br>
+            <input type="submit"  value="Отправить">
+        </form>
+    </div>
+
+    <script type="application/javascript">
+      $.getJSON('https://ipgeolocation.abstractapi.com/v1/?api_key=a3d9140498684d4e923be56f0ae1e6c6', function(data) {
+          let all = JSON.stringify(data, null, 2);
+          console.log(all);
+          console.log(data['ip_address']);
+          const tt = document.getElementById("ip");
+          tt.setAttribute('value', data['ip_address'])
+        });
+    </script>
+
+{% endblock %}
