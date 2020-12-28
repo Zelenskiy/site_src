@@ -46,6 +46,12 @@ def hello_world():
     return 'Hello World on http://zelenskiy.pythonanywhere.com/!'
 
 
+@app.route('/posts')
+def posts():
+    articles = Article.query.order_by(Article.date).all()
+    return render_template('posts.html', articles=articles)
+
+
 @app.route('/create', methods=['POST', 'GET'])
 def create_article():
     if request.method == "POST":
@@ -59,7 +65,7 @@ def create_article():
             db.session.add(article)
             db.session.commit()
 
-            return redirect('/')
+            return redirect('/create')
         except:
             return "error"
 
