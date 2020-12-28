@@ -10,8 +10,8 @@
 
         <form method="POST">
             <input name="title" id="title" placeholder="Назва новини" type="text"><br>
-            <input name="ip" id="ip" placeholder="Назва новини" type="text" hidden><br>
-            <textarea name="intro" id="intro" cols="30" rows="10" ></textarea><br>
+            <input name="geo" id="geo" type="text" hidden><br>
+{#            <textarea name="intro" id="intro" cols="30" rows="10" ></textarea><br>#}
             <textarea name="text" id="text" cols="30" rows="10" ></textarea><br>
             <input type="submit"  value="Отправить">
         </form>
@@ -22,8 +22,9 @@
           let all = JSON.stringify(data, null, 2);
           console.log(all);
           console.log(data['ip_address']);
-          const tt = document.getElementById("ip");
-          tt.setAttribute('value', data['ip_address'])
+          const tt = document.getElementById("geo");
+          tt.setAttribute('value', all)
+          {#tt.setAttribute('value', data['ip_address'])#}
         });
     </script>
 
