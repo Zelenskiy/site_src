@@ -1,8 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Процес створення google Ф
+
+"""
 
 import os
-import oauth2client
+from test import test
 
 
 from flask import Flask, render_template, url_for, request, redirect
@@ -47,7 +51,8 @@ def user(name):
 
 @app.route('/readgss')
 def readGoogleSpreadSheets():
-    return 'Ok'
+    s = test()
+    return s
 
 
 @app.route('/')
