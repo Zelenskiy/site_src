@@ -6,7 +6,7 @@
 """
 
 import os
-from test import test
+from sheetutils import test
 
 
 from flask import Flask, render_template, url_for, request, redirect

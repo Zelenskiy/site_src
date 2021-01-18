@@ -73,9 +73,34 @@ def write(i,text):
         }
     ).execute()
 
+def addRow(list):
+    i = (searchEmotyRow())
+    write(i, list)
+
+def addBlock(list):
+    i = (searchEmotyRow())
+    service = init()
+    length = len(list)
+    print(length)
+    values = service.spreadsheets().values().batchUpdate(
+        spreadsheetId=spreadsheet_id,
+        body={
+            "valueInputOption": "USER_ENTERED",
+            "data": [
+                {"range": "missingbook!A" + str(i) + ":J" + str(i+length) + "",
+                 "majorDimension": "ROWS",
+                 "values": list},
+            ]
+        }
+    ).execute()
+
 
 if __name__ == "__main__":
-    # pprint(test())
-    i = (searchEmotyRow())
-    write(i, ['text', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    # addRow(['text2', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    addBlock([
+        ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        ['00', '10', '20', '30', '40', '50', '60', '70', '80'],
+        ['000', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
+
+             ])
 
