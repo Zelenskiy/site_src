@@ -61,8 +61,10 @@ def hello_world():
 
 @app.route('/addblock', methods=['POST'])
 def add_block():
+    url_my = ''
     if request.method == "POST":
         text = request.form['text']
+        url_my = request.form['url_client']
         p = (text.split("\r\n"))
         lst = []
         for r in p:
@@ -71,11 +73,10 @@ def add_block():
             for c in w:
                 tmp.append(c)
             lst.append(tmp)
-        print(lst)
+        print(url_my)
         addBlock(lst)
 
-
-    return 'Операцію здійснено'
+    return redirect(url_my)
 
 
 @app.route('/posts')
