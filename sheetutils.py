@@ -94,13 +94,20 @@ def addBlock(list):
         }
     ).execute()
 
+def readBlock(block):
+    service = init()
+    list = service.spreadsheets().values().get(
+        spreadsheetId=spreadsheet_id,
+        range=block,
+        majorDimension='ROWS'
+    ).execute()
+    return list;
 
 if __name__ == "__main__":
     # addRow(['text2', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-    addBlock([
-        ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-        ['00', '10', '20', '30', '40', '50', '60', '70', '80'],
-        ['000', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-
-             ])
+    # addBlock([
+    #     ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    #     ['00', '10', '20', '30', '40', '50', '60', '70', '80'],
+    #     ['000', '100', '200', '300', '400', '500', '600', '700', '800', '900'],])
+    print(readBlock("missingbook!A879:J881")['values'])
 

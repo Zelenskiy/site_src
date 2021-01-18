@@ -6,7 +6,7 @@
 """
 
 import os
-from sheetutils import test
+from sheetutils import *
 
 
 from flask import Flask, render_template, url_for, request, redirect
@@ -57,7 +57,25 @@ def readGoogleSpreadSheets():
 
 @app.route('/')
 def hello_world():
-    return 'Hello World on http://zelenskiy.pythonanywhere.com/!'
+    return 'Hello World on http://zelenskiy.pythonanywhere.com/!'\
+
+@app.route('/addblock', methods=['POST'])
+def add_block():
+    if request.method == "POST":
+        text = request.form['text']
+        p = (text.split("\r\n"))
+        lst = []
+        for r in p:
+            w = r.split("\t")
+            tmp = []
+            for c in w:
+                tmp.append(c)
+            lst.append(tmp)
+        print(lst)
+        addBlock(lst)
+
+
+    return 'Операцію здійснено'
 
 
 @app.route('/posts')
