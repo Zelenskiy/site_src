@@ -6,7 +6,7 @@
 https://www.youtube.com/watch?v=Bf8KHZtcxnA&ab_channel=%D0%94%D0%B8%D0%B4%D0%B6%D0%B8%D1%82%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D1%83%D0%B9%21
 До прав редагувати таблицю додати користувача account@t-sunlight-247017.iam.gserviceaccount.com
 (з файла project-fa0cf409504d.json)
-
+ https://habr.com/ru/post/305378/
 '''
 
 from pprint import pprint
@@ -14,6 +14,7 @@ from pprint import pprint
 import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
+from Spreadsheet import Spreadsheet
 
 # Файл, полученный в Google Developer Console
 CREDENTIALS_FILE = 'project-fa0cf409504d.json'
@@ -31,18 +32,32 @@ def init():
     return  service
 
 #Шукаємо перший порожній рядок на сторінці missingbook
-def searchEmotyRow():
+def searchEmptyRow(idSpreadheet, nameSheet="massingbook"):
     service = init()
     i = 3
     s = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheet_id,
-        range='missingbook!B'+str(3)+':J'+str(5000)+'',
+        spreadsheetId=idSpreadheet,
+        range=nameSheet + '!B'+str(3)+':J'+str(5000)+'',
         majorDimension='ROWS'
     ).execute()
     for row in s['values']:
         # print(row)
         i += 1
     return i
+
+def searchOnDate(d1, d2):
+    service = init()
+    s = service.spreadsheets().values().get(
+        spreadsheetId=spreadsheet_id,
+        range='missingbook!B' + str(3) + ':J' + str(5000) + '',
+        majorDimension='ROWS'
+    ).execute()
+    newList = []
+    for row in s['values']:
+        if row[1] >= d1 and row[1] <= d2 :
+            newList.append(row)
+    return newList
+
 
 
 def test():
@@ -73,12 +88,12 @@ def write(i,text):
         }
     ).execute()
 
-def addRow(list):
-    i = (searchEmotyRow())
+def addRow(idSpreadheet, list):
+    i = (searchEmptyRow(idSpreadheet, nameSheet="massingbook"))
     write(i, list)
 
 def addBlock(list):
-    i = (searchEmotyRow())
+    i = (searchEmptyRow())
     service = init()
     length = len(list)
     print(length)
@@ -94,11 +109,11 @@ def addBlock(list):
         }
     ).execute()
 
-def readBlock(block):
+def readBlock(idSpreadheet, nameSheet="massingbook", block='A1:J5000'):
     service = init()
     list = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheet_id,
-        range=block,
+        spreadsheetId=idSpreadheet,
+        range= nameSheet + '!' + block,
         majorDimension='ROWS'
     ).execute()
     return list;
@@ -109,5 +124,6 @@ if __name__ == "__main__":
     #     ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
     #     ['00', '10', '20', '30', '40', '50', '60', '70', '80'],
     #     ['000', '100', '200', '300', '400', '500', '600', '700', '800', '900'],])
-    print(readBlock("missingbook!A879:J881")['values'])
+    print(readBlock(spreadsheet_id, "missingbook", "A879:J881")['values'])
+    # addSheet()
 

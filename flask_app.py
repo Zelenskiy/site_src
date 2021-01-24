@@ -6,14 +6,15 @@
 """
 
 import os
-from sheetutils import *
+from sheetutils import addBlock, searchOnDate, test
 
-
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 # basedir = 'G:\\Projects\\site_src_python\\blog.sqlite'
+from tt import pzCreate
+
 basedir = os.path.abspath(__file__)
 
 app = Flask(__name__)
@@ -59,7 +60,27 @@ def readGoogleSpreadSheets():
 def hello_world():
     return 'Hello World on http://zelenskiy.pythonanywhere.com/!'\
 
-@app.route('/addblock', methods=['POST'])
+@app.route('/createpz/', methods=['POST'])
+def createpz():
+    if request.method == "POST":
+        d1 = request.form['date_start']
+        d2 = request.form['date_finish']
+        idMissTable = request.form['idmisstable']
+        nameSheetMissTable = request.form['namesheetmisstable']
+        # urlPZ = nameSheetMissTable
+        urlPZ = pzCreate(idMissTable, nameSheet=nameSheetMissTable, d1=d1, d2=d2)
+        # Додаємо адресу до таблиці
+
+
+        return 'ПОЯСНЮВАЛЬНИ ЗАПИСКА<BR>' \
+               'за період від ' + d1 + ' до ' + d2 + '. <br>' \
+               'Згенеровано ' + str(datetime.now()) + '. <br>' \
+               'Покликання на сторінку <a href="' + urlPZ + '">' + urlPZ + '</a>'
+
+
+    return 'Hello World on http://zelenskiy.pythonanywhere.com/!'
+
+@app.route('/addblock', methods=['POST', 'GET'])
 def add_block():
     url_my = ''
     if request.method == "POST":
@@ -76,7 +97,7 @@ def add_block():
         print(url_my)
         addBlock(lst)
 
-    return redirect(url_my)
+    return redirect("https://znz16300.github.io/site/zamini.html")
 
 
 @app.route('/posts')
