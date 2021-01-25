@@ -32,7 +32,7 @@ def init():
     return  service
 
 #Шукаємо перший порожній рядок на сторінці missingbook
-def searchEmptyRow(idSpreadheet, nameSheet="massingbook"):
+def searchEmptyRow(idSpreadheet, nameSheet):
     service = init()
     i = 3
     s = service.spreadsheets().values().get(
@@ -92,10 +92,10 @@ def addRow(idSpreadheet, list):
     i = (searchEmptyRow(idSpreadheet, nameSheet="massingbook"))
     write(i, list)
 
-def addBlock(list):
-    i = (searchEmptyRow())
+def addBlock(idSpreadheet, nameSheet, lst):
+    i = searchEmptyRow(idSpreadheet, nameSheet)
     service = init()
-    length = len(list)
+    length = len(lst)
     print(length)
     values = service.spreadsheets().values().batchUpdate(
         spreadsheetId=spreadsheet_id,
@@ -104,7 +104,7 @@ def addBlock(list):
             "data": [
                 {"range": "missingbook!A" + str(i) + ":J" + str(i+length) + "",
                  "majorDimension": "ROWS",
-                 "values": list},
+                 "values": lst},
             ]
         }
     ).execute()

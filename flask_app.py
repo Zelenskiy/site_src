@@ -17,6 +17,8 @@ from tt import pzCreate
 
 basedir = os.path.abspath(__file__)
 
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -80,12 +82,13 @@ def createpz():
 
     return 'Hello World on http://zelenskiy.pythonanywhere.com/!'
 
-@app.route('/addblock', methods=['POST', 'GET'])
+@app.route('/addblock/', methods=['POST'])
 def add_block():
     url_my = ''
     if request.method == "POST":
         text = request.form['text']
         url_my = request.form['url_client']
+        idSpreadheet = request.form['idmisstable0']
         p = (text.split("\r\n"))
         lst = []
         for r in p:
@@ -95,7 +98,7 @@ def add_block():
                 tmp.append(c)
             lst.append(tmp)
         print(url_my)
-        addBlock(lst)
+        addBlock(idSpreadheet, "missingbook", lst)
 
     return redirect("https://znz16300.github.io/site/zamini.html")
 
