@@ -19,7 +19,7 @@ from Spreadsheet import Spreadsheet
 # Файл, полученный в Google Developer Console
 CREDENTIALS_FILE = 'project-fa0cf409504d.json'
 # ID Google Sheets документа (можно взять из его URL)
-spreadsheet_id = '1gIGSxWp-DQ6Cm5KiB-Z76gj4YyN0crjseQQgCetDCtY'
+# spreadsheet_id = '1gIGSxWp-DQ6Cm5KiB-Z76gj4YyN0crjseQQgCetDCtY'
 
 def init():
     # Авторизуемся и получаем service — экземпляр доступа к API
@@ -37,7 +37,7 @@ def searchEmptyRow(idSpreadheet, nameSheet):
     i = 3
     s = service.spreadsheets().values().get(
         spreadsheetId=idSpreadheet,
-        range=nameSheet + '!B'+str(3)+':J'+str(5000)+'',
+        range=nameSheet + '!B'+str(3)+':J'+str(10000)+'',
         majorDimension='ROWS'
     ).execute()
     for row in s['values']:
@@ -45,7 +45,7 @@ def searchEmptyRow(idSpreadheet, nameSheet):
         i += 1
     return i
 
-def searchOnDate(d1, d2):
+def searchOnDate(spreadsheet_id, d1, d2):
     service = init()
     s = service.spreadsheets().values().get(
         spreadsheetId=spreadsheet_id,
@@ -60,7 +60,7 @@ def searchOnDate(d1, d2):
 
 
 
-def test():
+def test(spreadsheet_id):
     service = init()
     # read from spreadsheet
     values = service.spreadsheets().values().get(
@@ -70,7 +70,7 @@ def test():
     ).execute()
     return values
 
-def write(i,text):
+def write(spreadsheet_id, i,text):
     service = init()
     # write to spreadsheet
     values = service.spreadsheets().values().batchUpdate(
@@ -98,7 +98,7 @@ def addBlock(idSpreadheet, nameSheet, lst):
     length = len(lst)
     print(length)
     values = service.spreadsheets().values().batchUpdate(
-        spreadsheetId=spreadsheet_id,
+        spreadsheetId=idSpreadheet,
         body={
             "valueInputOption": "USER_ENTERED",
             "data": [
@@ -116,14 +116,29 @@ def readBlock(idSpreadheet, nameSheet="massingbook", block='A1:J5000'):
         range= nameSheet + '!' + block,
         majorDimension='ROWS'
     ).execute()
-    return list;
+    return list
+
+def _read(idSpreadheet, nameSheet):
+    service = init()
+    i = 3
+    s = service.spreadsheets().values().get(
+        spreadsheetId=idSpreadheet,
+        range=nameSheet + '!A'+str(3)+':N'+str(10000)+'',
+        majorDimension='ROWS'
+    ).execute()
+
+    return s['values']
 
 if __name__ == "__main__":
-    # addRow(['text2', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-    # addBlock([
-    #     ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-    #     ['00', '10', '20', '30', '40', '50', '60', '70', '80'],
-    #     ['000', '100', '200', '300', '400', '500', '600', '700', '800', '900'],])
-    print(readBlock(spreadsheet_id, "missingbook", "A879:J881")['values'])
-    # addSheet()
+    teachers = ["Труш Ольга Миколаївна", "Зеленський Олександр Станіславович", "Лапко Юлія Миколаївна", "Береговець Наталія Василівна", "Богдан Олена Іванівна", "Бойко Лідія Анатоліївна", "Бугай Віталій Григорович", "Бушко Валентина Володимирівна", "Герасименко Марія Петрівна", "Гнилуша Лілія Володимирівна", "Давиденко Микола Григорович", "Дзюба Людмила Миколаївна", "Дитюк Олена Іванівна", "Долиненко Вікторія Андріївна", "Дуденко Олена Юріївна", "Звєрєв Василь Юрійович", "Зеленська Галина Олексіївна", "Іванюк Ольга Миколаївна", "Карпенко Ганна Вікторівна", "Кашперська Людмила Василівна", "Компанець Любов Григорівна", "Коса Тетяна Михайлівна", "Кузуб Галина Федорівна", "Купріян Людмила Володимирівна", "Литвякова Наталія Вікторівна", "Лопата Олена Миколаївна", "Мартинова Юлія Сергіївна", "Масльонка Володимир Григорович", "Мельник Валентина Михайлівна", "Міна Алла Миколаївна", "Мозоль Олена Володимирівна", "Мурза Світлана Миколаївна", "Ніколаєнко Юлія Олександрівна", "Опанасенко Ніна Андріївна", "Орсагош Руслан Ілліч", "Пилипенко Лариса Віталіївна", "Пилипенко Ольга Павлівна", "Пильник Світлана Володимирівна", "Підвербна Любов Василівна", "Плеса Інна Вікторівна", "Пономарчук Валентина Михайлівна", "Ревко Алла Олександрівна", "Сало Алла Володимирівна", "Сахно Ярина Дмитрівна", "Собко Валентина Іванівна", "Сом Тетяна Миколаївна", "Тарасенко Олена Миколаївна", "Титаренко Альона Сергіївна", "Халімон Олександр Анаталійович", "Чава Марія Омелянівна", "Чава Сергій Анатолійович", "Шиш Наталія Василівна", "Ведмідь Петро Іванович", "Шемендюк Любов Іванівна", "Василенко Ігор Володимирович", "Волошина Марина С.", "Герасименко Віктор Олександрович", "Гуляй Людмила Миколаївна", "Гуща Ірина Віталіївна", "Давиденко Ольга Віталіївна", "Івашута Наталія Михайлівна", "Йовенко Юлія Вікторівна", "Козачок Наталія Іванівна", "Момот Наталія Андріївна", "Пономарчук Валентина  Олексіївна", "Труба Світлана Петрівна", "Турченяк Петро Йосипович", ]
+
+    # Читаємо дані про видані свідоцтва в Choippo
+    listAll = _read('1riSyWbebtO2WaY1aqldAbBeHSgy5IMFGi7lVeG0jqkU', "Лист1")
+    for l in listAll:
+        if len(l) > 2:
+            k = l[2].strip()
+            if k != '':
+                for t in teachers:
+                    if k in t:
+                        print(l)
 
