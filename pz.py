@@ -11,7 +11,7 @@ def psmaker(idSpreadheet, nameSheet="missingbook", d1='2020-09-01', d2='2020-09-
     #
     n = searchEmptyRow(idSpreadheet, nameSheet)
     #
-    list = readBlock(spreadsheet_id, nameSheet, block='A1:J'+str(n))
+    list = readBlock(idSpreadheet, nameSheet, block='A1:J'+str(n))
 
     history = []
 
